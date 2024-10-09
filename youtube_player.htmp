@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube Video Player</title>
+</head>
+<body>
+  <h1>YouTube Video Player</h1>
+  
+  <input type="text" id="ytLink" placeholder="Enter YouTube video ID (e.g., FTai93ssi1Q)">
+  <button onclick="loadVideo()">Load Video</button>
+
+  <div id="player"></div>
+
+  <label for="speed">Playback Speed:</label>
+  <select id="speed" onchange="setSpeed()">
+    <option value="0.25">0.25x</option>
+    <option value="0.5">0.5x</option>
+    <option value="1" selected>1x (Normal)</option>
+    <option value="1.5">1.5x</option>
+    <option value="2">2x</option>
+  </select>
+
+  <label for="quality">Quality:</label>
+  <select id="quality" onchange="setQuality()">
+    <option value="small">Low (240p)</option>
+    <option value="medium">Medium (360p)</option>
+    <option value="hd720">HD (720p)</option>
+    <option value="hd1080">Full HD (1080p)</option>
+  </select>
+
+  <script>
+    var player;
+
+    function loadVideo() {
+      const videoId = document.getElementById('ytLink').value;
+      if (player) {
+        player.loadVideoById(videoId);
+      } else {
+        player = new YT.Player('player', {
+          height: '390',
+          width: '640',
+          videoId: videoId,
+          events: {
+            'onReady': onPlayerReady,
+          },
+        });
+      }
+    }
+
+    function onPlayerReady(event) {
+      event.target.playVideo();
+    }
+
+    function setSpeed() {
+      const speed = document.getElementById('speed').value;
+      player.setPlaybackRate(parseFloat(speed));
+    }
+
+    function setQuality() {
+      const quality = document.getElementById('quality').value;
+      player.setPlaybackQuality(quality);
+    }
+
+    // Load YouTube IFrame API
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+  </script>
+</body>
+</html>
